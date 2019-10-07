@@ -14,13 +14,14 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib")) 
-    api("junit:junit:4.12")
-    implementation("junit:junit:4.12")
-    testImplementation("junit:junit:4.12")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.2.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.2.0")
+    testRuntime("org.junit.platform:junit-platform-console:1.2.0")
 }
 
 tasks {
-    test {                                  
+    // Use the native JUnit support of Gradle.
+    "test"(Test::class) {
         useJUnitPlatform()
     }
 }
