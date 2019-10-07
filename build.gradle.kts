@@ -14,5 +14,13 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib")) 
+    api("junit:junit:4.12")
+    implementation("junit:junit:4.12")
+    testImplementation("junit:junit:4.12")
 }
 
+tasks {
+    test {                                  
+        useJUnitPlatform()
+    }
+}
