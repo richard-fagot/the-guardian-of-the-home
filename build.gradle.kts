@@ -1,3 +1,6 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent.*
+
 plugins {
     application
     kotlin("jvm") version "1.3.50" 
@@ -19,9 +22,13 @@ dependencies {
     testRuntime("org.junit.platform:junit-platform-console:1.2.0")
 }
 
-tasks {
-    // Use the native JUnit support of Gradle.
-    "test"(Test::class) {
-        useJUnitPlatform()
-    }
+tasks.test {
+	useJUnitPlatform()
+	testLogging {
+		events = setOf(PASSED, SKIPPED, FAILED)
+        exceptionFormat = TestExceptionFormat.FULL
+        showExceptions = true
+        showCauses = true
+        showStackTraces = true
+	}
 }

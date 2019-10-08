@@ -1,6 +1,14 @@
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.DisplayName
 
-@Test fun testFail() : Unit {
-    Assertions.assertTrue(true)
+class MainTest {
+
+    @Test
+    @DisplayName("Mon cas de test")
+    fun `testFail devrait faire ça`() {
+        System.out.println("coucou");
+        Assertions.assertTrue(false)
+    }
+
 }
