@@ -12,6 +12,11 @@ import org.apache.http.impl.client.HttpClientBuilder
 import org.apache.http.util.EntityUtils
 import org.json.JSONArray
 import org.json.JSONObject
+import javax.json.bind.Jsonb
+import javax.json.bind.JsonbBuilder
+
+import home.guardian.azure.Input
+
 
 class Main {
     
@@ -20,11 +25,10 @@ class Main {
     val uriBase =
         "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect"
 
-    val imageWithFaces =
-        "{\"url\":\"https://upload.wikimedia.org/wikipedia/commons/9/9a/Congestion_caused_by_a_road_accident%2C_Algarve%2C_Portugal.jpg\"}"
-
     val faceAttributes =
         "age,gender,headPose,smile,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,blur,exposure,noise"
+
+    val imageURI = "https://upload.wikimedia.org/wikipedia/commons/9/9a/Congestion_caused_by_a_road_accident%2C_Algarve%2C_Portugal.jpg"
 
     companion object {
         @JvmStatic
@@ -38,32 +42,29 @@ class Main {
     fun detectObjects() {
         val httpclient : HttpClient = HttpClients.createDefault();
 
-        try
-        {
-            val builder : URIBuilder = URIBuilder("https://testvisionkotlin.cognitiveservices.azure.com/vision/v2.0/detect");
+        try {
+            val builder : URIBuilder = URIBuilder("https://testvisionkotlin.cognitiveservices.azure.com/vision/v2.0/detect")
 
-            //builder.setParameter("visualFeatures", "Categories");
-            //builder.setParameter("details", "{string}");
-            //builder.setParameter("language", "en");
-
-            val uri : URI = builder.build();
-            val request : HttpPost = HttpPost(uri);
-            request.setHeader("Content-Type", "application/json");
-            request.setHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
+            val uri : URI = builder.build()
+            val request : HttpPost = HttpPost(uri)
+            request.setHeader("Content-Type", "application/json")
+            request.setHeader("Ocp-Apim-Subscription-Key", subscriptionKey)
 
 
             // Request body
-            val reqEntity : StringEntity = StringEntity(imageWithFaces);
-            request.setEntity(reqEntity);
+            val input = Input(imageURI)
+            val jsonb : Jsonb = JsonbBuilder.create()
+            val inputJson : String = jsonb.toJson(input)
 
-            val response : HttpResponse = httpclient.execute(request);
-            val entityNullable : HttpEntity? = response.getEntity();
+            val reqEntity : StringEntity = StringEntity(inputJson)
+            request.setEntity(reqEntity)
+
+            val response : HttpResponse = httpclient.execute(request)
+            val entityNullable : HttpEntity? = response.getEntity()
             val entity = entityNullable ?: return
 
-            System.out.println(EntityUtils.toString(entity));
-        }
-        catch (e : Exception)
-        {
+            System.out.println(EntityUtils.toString(entity))
+        } catch (e : Exception) {
             System.out.println(e.message);
         }
     }
@@ -90,7 +91,7 @@ class Main {
             request.setHeader("Ocp-Apim-Subscription-Key", subscriptionKey)
 
             // Request body.
-            var reqEntity : StringEntity = StringEntity(imageWithFaces)
+            var reqEntity : StringEntity = StringEntity("imageWithFaces")
             request.setEntity(reqEntity)
 
             // Execute the REST API call and get the response entity.
@@ -115,7 +116,6 @@ class Main {
                 System.out.println(jsonString)
             }
             
-
         } catch (e : Exception) {
             // Display error message.
             System.out.println(e.message)

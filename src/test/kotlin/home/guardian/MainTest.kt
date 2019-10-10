@@ -7,7 +7,6 @@ class MainTest {
     @Test
     @DisplayName("Mon cas de test")
     fun `testFail devrait faire ça`() {
-        System.out.println("coucou");
         Assertions.assertTrue(false)
     }
 
