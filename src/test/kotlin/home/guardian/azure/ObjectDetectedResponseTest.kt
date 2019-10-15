@@ -10,6 +10,7 @@ import home.guardian.azure.ObjectDetected
 import javax.json.bind.Jsonb
 import javax.json.bind.JsonbBuilder
 import javax.json.bind.JsonbConfig
+import javax.json.bind.config.PropertyOrderStrategy
 
 class ObjectDetectedResponseTest {
     @Test
@@ -22,12 +23,14 @@ class ObjectDetectedResponseTest {
         
         val response = ObjectDetectedResponse(listOf(objDetected, objDetected2))
 
-        val config : JsonbConfig = JsonbConfig().withFormatting(true)
+        val config : JsonbConfig = JsonbConfig().withFormatting(false)
+                                                .withPropertyOrderStrategy(PropertyOrderStrategy.REVERSE)
+
         val jsonb : Jsonb = JsonbBuilder.create(config);
         val result : String = jsonb.toJson(response);
 
         println(result)
 
-         Assertions.assertEquals("{\"url\":\"http://example.com\"}", result)
+         Assertions.assertEquals("{\"objects\":[{\"rectangle\":{\"y\":2,\"x\":1,\"w\":3,\"h\":4},\"object\":\"Type\",\"confidence\":0.8},{\"rectangle\":{\"y\":6,\"x\":5,\"w\":7,\"h\":8},\"object\":\"Type2\",\"confidence\":0.1}]}", result)
     }
 }
